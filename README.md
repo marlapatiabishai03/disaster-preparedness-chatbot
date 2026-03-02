@@ -7,7 +7,7 @@
 ![Security](https://img.shields.io/badge/Security-bcrypt%20%7C%20dotenv-success)
 ![Status](https://img.shields.io/badge/Project-Completed-brightgreen)
 
----
+
 
 📌 Project Overview
 
@@ -26,7 +26,7 @@ Database: MySQL
 Security: bcrypt, dotenv  
 Version Control: Git & GitHub  
 
----
+
 
 👤 User Roles
 
@@ -44,7 +44,7 @@ Version Control: Git & GitHub
 - View Student Quiz Performance
 - Send Emergency Alerts
 
----
+
 
 🔐 Security Implementation
 
@@ -53,13 +53,13 @@ Version Control: Git & GitHub
 - .env excluded from GitHub via .gitignore  
 - No hardcoded database credentials  
 
----
+
 
 🏗 System Architecture
 
-Frontend → Express Backend → MySQL Database → AI Chatbot
+Frontend (HTML/CSS/JS) → Express Backend (Node.js) → MySQL Database → AI Chatbot Module
 
----
+
 
 ⚙️ Installation & Setup (Run Locally)
 
@@ -85,13 +85,13 @@ Server runs at:
 
 http://localhost:3000
 
----
+
 
 🎓 Academic Context
 
 Developed as a full-stack university project demonstrating authentication, secure backend architecture, database integration, and real-time alert systems.
 
----
+
 
 👨‍💻 Author
 
