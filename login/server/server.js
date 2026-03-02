@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const { exec } = require("child_process");
@@ -12,9 +13,9 @@ app.use(express.json());
    MYSQL CONNECTION
 ====================================================== */
 const db = mysql.createConnection({
-    user: "root",
-    password: "root123",
-    database: "disaster_chatbot",
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
     socketPath: "/tmp/mysql.sock"
 });
 
