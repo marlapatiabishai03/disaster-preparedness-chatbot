@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <h1>🛡️ Admin Login</h1>
+      <p class="subtitle">Administrator access only</p>
+
+      <input type="email" id="email" placeholder="Admin Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <button class="admin-btn" onclick="adminLogin()">Login</button>
+
+      <p id="error" class="error"></p>
+    </div>
+  </div>
+
+  <script>
+    async function adminLogin() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const error = document.getElementById("error");
+
+      error.innerText = "";
+
+      if (!email || !password) {
+        error.innerText = "Please enter email and password";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:3000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+
+          // 🔐 ADMIN ROLE CHECK
+          if (data.user.role !== "admin") {
+            error.innerText = "Access denied. Admins only.";
+            return;
+          }
+
+          // SAVE ADMIN SESSION
+          localStorage.setItem("admin", JSON.stringify(data.user));
+
+          // REDIRECT TO ADMIN DASHBOARD
+          window.location.href = "../admin-dashboard.html";
+
+        } else {
+          error.innerText = data.message || "Invalid credentials";
+        }
+
+      } catch (err) {
+        error.innerText = "Backend not running. Please start server.";
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Login</title>
+  <link rel="stylesheet" href="login.css">
+</head>
+<body>
+
+  <div class="login-container">
+    <div class="login-card">
+      <h1>🎓 Student Login</h1>
+      <p class="subtitle">Enter your credentials to continue</p>
+
+      <input type="email" id="email" placeholder="Student Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+
+      <button onclick="studentLogin()">Login</button>
+
+      <p id="error" class="error"></p>
+    </div>
+  </div>
+
+  <script>
+    async function studentLogin() {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const error = document.getElementById("error");
+
+      error.innerText = "";
+
+      // BASIC VALIDATION
+      if (!email || !password) {
+        error.innerText = "Please enter email and password";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://localhost:3000/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // SAVE USER SESSION
+          localStorage.setItem("user", JSON.stringify(data.user));
+
+          // REDIRECT TO DASHBOARD
+          window.location.href = "../student-dashboard.html";
+        } else {
+          error.innerText = data.message || "Invalid credentials";
+        }
+      } catch (err) {
+        error.innerText = "Backend not running. Please start server.";
+      }
+    }
+  </script>
+
+</body>
+</html>

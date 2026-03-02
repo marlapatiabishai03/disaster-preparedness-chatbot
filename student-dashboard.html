@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Dashboard</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: linear-gradient(135deg, #f8fafc, #eef2ff);
+      min-height: 100vh;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      padding: 18px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    header h2 {
+      margin: 0;
+    }
+
+    header button {
+      background: white;
+      color: #2563eb;
+      border: none;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    main {
+      padding: 40px;
+    }
+
+    .welcome {
+      font-size: 22px;
+      margin-bottom: 8px;
+      color: #1f2937;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 30px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #1e40af;
+    }
+
+    .card p {
+      color: #4b5563;
+      line-height: 1.5;
+    }
+
+    .card button {
+      margin-top: 15px;
+      padding: 10px 16px;
+      border-radius: 10px;
+      border: none;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h2>🎓 Student Dashboard</h2>
+  <button onclick="logout()">Logout</button>
+</header>
+<!-- 🚨 REAL-TIME ALERT BANNER -->
+<div id="alertBanner" style="
+  display:none;
+  background:#fee2e2;
+  color:#991b1b;
+  padding:14px 30px;
+  font-weight:600;
+  border-bottom:2px solid #ef4444;
+">
+  <span id="alertText"></span>
+</div>
+<main>
+  <div class="welcome">
+    Welcome back, <span id="studentName">Student</span> 👋
+  </div>
+
+  <div class="subtitle">Choose an option below to continue</div>
+
+  <div class="card-grid">
+
+    <!-- DISASTERS -->
+    <div class="card">
+      <h3>🌊 Learn About Disasters</h3>
+      <p>Access information about floods, earthquakes, cyclones and safety measures.</p>
+      <button onclick="viewDisasters()">View Disasters</button>
+    </div>
+
+    <!-- QUIZ -->
+    <div class="card">
+      <h3>📝 Attempt Quiz</h3>
+      <p>Test your knowledge and preparedness through interactive quizzes.</p>
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- QUIZ SCORE -->
+    <div class="card">
+      <h3>📊 Quiz Score</h3>
+      <p id="scoreText">You have not attempted the quiz yet.</p>
+      <button onclick="refreshScore()">Refresh Score</button>
+    </div>
+
+    <!-- AWARENESS SCORE -->
+    <div class="card">
+      <h3>🧠 Awareness Level</h3>
+      <p id="awarenessText">Not checked yet.</p>
+      <button onclick="loadAwareness()">Check Awareness</button>
+    </div>
+<div class="card">
+  <h3>🚨 Emergency Alert</h3>
+  <p id="alertBox">No alerts.</p>
+</div>
+
+  </div>
+</main>
+
+<script>
+/* ===== AUTH CHECK ===== */
+const userData = localStorage.getItem("user");
+if (!userData) {
+  window.location.href = "login/student-login.html";
+}
+
+const user = JSON.parse(userData);
+document.getElementById("studentName").innerText = user.name;
+
+/* ===== LOGOUT ===== */
+function logout() {
+  localStorage.removeItem("user");
+  window.location.href = "login/student-login.html";
+}
+
+/* ===== NAVIGATION ===== */
+function viewDisasters() {
+  window.location.href = "index.html";
+}
+
+function startQuiz() {
+  window.location.href = "quiz.html";
+}
+
+/* ===== DATABASE QUIZ SCORE (FIXED) ===== */
+async function refreshScore() {
+  const scoreText = document.getElementById("scoreText");
+
+  try {
+    const response = await fetch(
+      `http://localhost:3000/quiz/score/${user.id}`,
+      {
+        headers: {
+          "role": user.role
+        }
+      }
+    );
+
+    if (!response.ok) {
+      scoreText.innerText = "Access denied.";
+      return;
+    }
+
+    const data = await response.json();
+
+    if (!data.attempted) {
+      scoreText.innerText =
+        "You have not attempted the quiz yet.";
+    } else {
+      scoreText.innerText =
+        `Your quiz score: ${data.score} / ${data.total}`;
+    }
+
+  } catch (err) {
+    scoreText.innerText =
+      "Unable to fetch quiz score.";
+  }
+}
+
+/* ===== AWARENESS QUIZ SCORE ===== */
+function loadAwareness() {
+  const score = localStorage.getItem("awarenessScore");
+  const text = document.getElementById("awarenessText");
+
+  if (score === null) {
+    text.innerText = "You have not taken the awareness quiz yet.";
+  } else if (score >= 4) {
+    text.innerText = "Excellent awareness! You are well prepared.";
+  } else if (score >= 3) {
+    text.innerText = "Good awareness, but keep improving.";
+  } else {
+    text.innerText = "Low awareness. Please review disaster safety topics.";
+  }
+}
+
+/* ===== REAL-TIME ALERT FETCHING (FIXED) ===== */
+async function fetchAlert() {
+  const box = document.getElementById("alertBox");
+
+  try {
+    const res = await fetch("http://localhost:3000/alerts/latest", {
+      headers: {
+        "role": user.role
+      }
+    });
+
+    if (!res.ok) {
+      box.innerText = "Access denied.";
+      return;
+    }
+
+    const data = await res.json();
+
+    if (data.available) {
+      box.innerHTML =
+        `<b>${data.alert.title}</b><br>${data.alert.message}`;
+    } else {
+      box.innerText = "No alerts.";
+    }
+
+  } catch (err) {
+    box.innerText = "Unable to fetch alerts";
+  }
+}
+
+/* LOAD ALERT */
+fetchAlert();
+setInterval(fetchAlert, 15000);
+</script>
+
+</body>
+</html>

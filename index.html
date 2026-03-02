@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Disaster Preparedness System</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6fb;
+            color: #333;
+        }
+
+        /* NAVBAR */
+        .navbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background: rgba(31, 60, 136, 0.95);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 15px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+        .navbar h2 {
+            margin: 0;
+        }
+
+        .navbar a {
+            color: white;
+            margin-left: 20px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        /* HERO */
+        .hero {
+            padding: 80px 40px;
+            text-align: center;
+            background: linear-gradient(to right, #1f3c88, #3a6ff7);
+            color: white;
+        }
+
+        .hero h1 {
+    font-size: 44px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+}
+
+.hero p {
+    font-size: 19px;
+    opacity: 0.92;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+
+        /* DISASTER SECTION */
+        .section {
+            padding: 50px 40px;
+        }
+
+        .section h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+.card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 35px rgba(58,111,247,0.35);
+}
+
+.card-icon {
+    transition: transform 0.3s ease;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.15);
+}
+
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow:
+        0 20px 40px rgba(58, 111, 247, 0.35),
+        0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #3a6ff7, #1f3c88);
+            opacity: 0.08;
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: #1f3c88;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3a6ff7, #1f3c88);
+            color: white;
+            font-size: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px;
+        }
+
+      /* FLOATING AI CHATBOT */
+.chatbot {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 360px;
+    background: linear-gradient(180deg, #ffffff, #eef2ff);
+    border-radius: 28px;
+    box-shadow:
+        0 30px 60px rgba(31, 60, 136, 0.35),
+        0 12px 25px rgba(0, 0, 0, 0.18);
+    overflow: hidden;
+    z-index: 1000;
+    border: 1px solid rgba(58, 111, 247, 0.25);
+}
+
+/* AI HEADER */
+.chatbot-header {
+    background: linear-gradient(135deg, #1f3c88, #3a6ff7);
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.6px;
+    position: relative;
+    border-bottom-left-radius: 22px;
+    border-bottom-right-radius: 22px;
+}
+
+/* AI STATUS INDICATOR */
+.chatbot-header::after {
+    content: "● AI Online";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    color: #9cff9c;
+    font-weight: 500;
+}
+
+/* CHAT BODY */
+.chatbot-body {
+    height: 230px;
+    padding: 16px;
+    overflow-y: auto;
+    background: #f4f6fb;
+    font-size: 14px;
+}
+
+/* INPUT AREA */
+.chatbot-input {
+    display: flex;
+    border-top: 1px solid #ddd;
+    background: #ffffff;
+}
+
+.chatbot-input input {
+    flex: 1;
+    border: none;
+    padding: 12px;
+    outline: none;
+    border-bottom-left-radius: 28px;
+}
+
+.chatbot-input button {
+    background: linear-gradient(135deg, #1f3c88, #3a6ff7);
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    cursor: pointer;
+    border-bottom-right-radius: 28px;
+}
+
+
+/* CLOSED STATE */
+.chatbot.collapsed .chatbot-body,
+.chatbot.collapsed .chatbot-input {
+    display: none;
+}
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            background: #1f3c88;
+            color: white;
+            margin-top: 50px;
+        }
+        /* SECTION POLISH */
+.section {
+    background: #f4f6fb;
+    border-top: 1px solid #e6e9f0;
+}
+
+.section h2 {
+    position: relative;
+}
+
+.section h2::after {
+    content: "";
+    display: block;
+    width: 160px;
+    height: 4px;
+    background: linear-gradient(to right, #1f3c88, #3a6ff7);
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+/* CARD ENTRANCE ANIMATION */
+.cards .card {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: cardFadeUp 0.6s ease forwards;
+}
+
+.cards .card:nth-child(1) { animation-delay: 0.05s; }
+.cards .card:nth-child(2) { animation-delay: 0.10s; }
+.cards .card:nth-child(3) { animation-delay: 0.15s; }
+.cards .card:nth-child(4) { animation-delay: 0.20s; }
+.cards .card:nth-child(5) { animation-delay: 0.25s; }
+
+@keyframes cardFadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+/* STICKY NAVBAR */
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    backdrop-filter: blur(8px);
+} 
+#quiz label {
+        display:block;
+        padding:10px 14px;
+        margin:6px 0;
+        border-radius:10px;
+        cursor:pointer;
+        transition: background 0.25s ease;
+    }
+
+    #quiz label:hover {
+        background:#eef2ff;
+    }
+
+
+    </style>
+</head>
+<body>
+    
+<!-- NAVBAR -->
+<div class="navbar">
+    <h2>DisasterPrep</h2>
+    <div>
+        <a href="#home">Home</a>
+        <a href="#disasters">Disasters</a>
+        <a href="#about">About</a>
+        <a href="#quiz">Quiz</a>
+        <a href="login/role.html" class="login-btn">Login</a>
+    </div>
+</div>
+
+<!-- HERO -->
+<div class="hero" id="home">
+    <h1>Disaster Preparedness & Response Education</h1>
+    <p>Educating communities to act before, during, and after disasters</p>
+</div>
+
+<!-- SOFT TRANSITION DIVIDER -->
+<div style="height:60px; background:linear-gradient(to bottom, #3a6ff7, #f4f6fb);"></div>
+
+<!-- FEATURE HIGHLIGHT STRIP (ADD HERE) -->
+<div style="
+    background:#ffffff;
+    padding:40px 20px;
+">
+    <div style="
+        max-width:1100px;
+        margin:0 auto;
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+        gap:25px;
+        text-align:center;
+    ">
+        <div>
+            <h3>🧠 Awareness</h3>
+            <p style="opacity:0.75;">Understand disaster risks and safety measures</p>
+        </div>
+        <div>
+            <h3>🚨 Preparedness</h3>
+            <p style="opacity:0.75;">Learn actions before, during, and after disasters</p>
+        </div>
+        <div>
+            <h3>🎓 Student-Focused</h3>
+            <p style="opacity:0.75;">Designed specifically for college students</p>
+        </div>
+    </div>
+</div>
+
+<!-- DISASTER CARDS -->
+<div class="section" id="disasters">
+    <h2>Types of Disasters</h2>
+<p style="
+    text-align:center;
+    margin-top:6px;
+    font-size:15px;
+    opacity:0.75;
+">
+    Learn about common disasters and how to stay safe during emergencies
+</p>
+
+    <div class="cards">
+
+        <div class="card" onclick="openModal('Flood')">
+            <div class="card-icon">🌊</div>
+            <h3>Flood</h3>
+            <p>Evacuation guidance, flood safety measures, and early warnings.</p>
+        </div>
+
+        <div class="card" onclick="openModal('Earthquake')">
+            <div class="card-icon">🌎</div>
+            <h3>Earthquake</h3>
+            <p>Protective actions before, during, and after earthquakes.</p>
+        </div>
+
+        <div class="card" onclick="openModal('Cyclone')">
+            <div class="card-icon">🌀</div>
+            <h3>Cyclone</h3>
+            <p>Preparedness steps, alerts, and cyclone safety.</p>
+        </div>
+
+        <div class="card" onclick="openModal('Fire')">
+            <div class="card-icon">🔥</div>
+            <h3>Fire</h3>
+            <p>Fire prevention, emergency exits, and response actions.</p>
+        </div>
+
+        <div class="card" onclick="openModal('Landslide')">
+            <div class="card-icon">⛰️</div>
+            <h3>Landslide</h3>
+            <p>Early signs, evacuation guidance, and landslide safety.</p>
+        </div>
+
+    </div>
+</div>
+<!-- ABOUT SECTION (PASTE HERE) -->
+<div class="section" id="about">
+    <h2>ℹ️ About This Project</h2>
+<p style="text-align:center; opacity:0.75;">
+    An educational disaster management system for college students
+</p>
+
+    <div style="
+        max-width: 900px;
+        margin: 0 auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        text-align: center;
+        line-height: 1.7;
+    ">
+
+        <p>
+            The <b>Disaster Preparedness and Response Education System</b> is a
+            community-focused platform designed to improve awareness and readiness
+            for natural disasters.
+        </p>
+
+        <p>
+            It provides structured information on different types of disasters and
+            educates users on the <b>correct actions to take before, during, and after</b>
+            an emergency.
+        </p>
+
+        <p>
+            The system includes an interactive, rule-based chatbot that
+            guides users with disaster safety instructions, laying the foundation
+            for future intelligent and real-time features.
+        </p>
+
+    </div>
+</div>
+
+<!-- QUIZ SECTION -->
+<div class="section" id="quiz">
+    <h2>📝 Disaster Preparedness Quiz</h2>
+    <p style="text-align:center; opacity:0.75;">
+        Test your awareness and preparedness level
+    </p>
+
+    <div style="
+        max-width:900px;
+        margin:0 auto;
+        background:#ffffff;
+        padding:30px;
+        border-radius:16px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.08);
+    ">
+
+        <p style="text-align:center; font-size:15px; opacity:0.8;">
+            This is an awareness quiz. Login to attempt the evaluated quiz.
+        </p>
+
+        <hr style="margin:25px 0;">
+
+        <!-- Q1 -->
+        <p><b>1. What should you do first during a flood?</b></p>
+        <label><input type="radio" name="q1" value="a"> Move to higher ground</label>
+        <label><input type="radio" name="q1" value="b"> Turn on electrical appliances</label>
+        <label><input type="radio" name="q1" value="c"> Walk through flood water</label>
+
+        <br>
+
+        <!-- Q2 -->
+        <p><b>2. What is the safest action during an earthquake?</b></p>
+        <label><input type="radio" name="q2" value="a"> Run outside immediately</label>
+        <label><input type="radio" name="q2" value="b"> Drop, Cover, and Hold On</label>
+        <label><input type="radio" name="q2" value="c"> Use elevators</label>
+
+        <br>
+
+        <!-- Q3 -->
+        <p><b>3. During a cyclone warning, what should you avoid?</b></p>
+        <label><input type="radio" name="q3" value="a"> Staying indoors</label>
+        <label><input type="radio" name="q3" value="b"> Coastal areas</label>
+        <label><input type="radio" name="q3" value="c"> Emergency kits</label>
+
+        <br>
+
+        <!-- Q4 -->
+        <p><b>4. What should you do in case of a fire?</b></p>
+        <label><input type="radio" name="q4" value="a"> Use elevators</label>
+        <label><input type="radio" name="q4" value="b"> Cover nose and mouth</label>
+        <label><input type="radio" name="q4" value="c"> Panic and run</label>
+
+        <br>
+
+        <!-- Q5 -->
+        <p><b>5. Which sign may indicate a possible landslide?</b></p>
+        <label><input type="radio" name="q5" value="a"> Clear weather</label>
+        <label><input type="radio" name="q5" value="b"> Cracks on the ground</label>
+        <label><input type="radio" name="q5" value="c"> Calm rivers</label>
+
+        <br><br>
+
+        <div style="text-align:center;">
+            <button onclick="submitAwarenessQuiz()" style="
+                padding:10px 22px;
+                border:none;
+                background:#1f3c88;
+                color:white;
+                border-radius:8px;
+                cursor:pointer;
+            ">
+                Submit Awareness Quiz
+            </button>
+
+            <p id="quizResult" style="margin-top:15px;font-weight:600;"></p>
+        </div>
+
+    </div>
+</div>
+
+
+    </div>
+</div>
+
+
+<!-- FLOATING CHATBOT -->
+<div class="chatbot collapsed" id="chatbot">
+
+    <div class="chatbot-header" onclick="toggleChatbot()">
+        Disaster Help Chatbot
+    </div>
+
+    <div class="chatbot-body" id="chatBox">
+        <p><b>Bot:</b> Ask me about floods, earthquakes, cyclones, fires, or landslides.</p>
+    </div>
+
+    <div class="chatbot-input">
+        <input type="text" id="userInput" placeholder="Type here">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div> <!-- ✅ CHATBOT CLOSED PROPERLY -->
+
+
+<!-- DISASTER INFO MODAL -->
+<div id="disasterModal" onclick="closeModal()" style="
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.6);
+    z-index:9999;
+">
+
+    <div onclick="event.stopPropagation()" style="
+    background:#ffffff;
+    max-width:500px;
+    margin:80px auto;
+    padding:25px;
+    border-radius:16px;
+    box-shadow:0 20px 40px rgba(0,0,0,0.3);
+    text-align:center;
+    position:relative;
+">
+
+
+        <h2 id="modalTitle">Disaster</h2>
+
+        <img id="modalImage"
+             alt="Disaster image"
+             style="
+                width:100%;
+                max-height:220px;
+                object-fit:cover;
+                border-radius:12px;
+                margin:12px 0;
+             ">
+
+        <p id="modalContent"></p>
+
+        <!-- VIDEO PLACEHOLDER -->
+        <div style="
+            margin-top:18px;
+            padding:14px;
+            border:2px dashed #3a6ff7;
+            border-radius:12px;
+            background:#f4f6fb;
+            text-align:center;
+        ">
+            <h3 style="margin:0; font-size:16px; color:#1f3c88;">
+                🎥 Learning Video
+            </h3>
+
+            <p style="font-size:13px; margin-top:6px; opacity:0.75;">
+                Educational videos will be added in future phases
+                to enhance disaster awareness and training.
+            </p>
+        </div>
+
+        <button onclick="closeModal()" style="
+            margin-top:15px;
+            padding:8px 16px;
+            border:none;
+            background:#1f3c88;
+            color:white;
+            border-radius:8px;
+            cursor:pointer;
+        ">
+            Close
+        </button>
+
+    </div>
+</div>
+
+
+</div>
+
+<footer style="
+    background:linear-gradient(to right, #1f3c88, #3a6ff7);
+    color:white;
+    padding:50px 20px;
+    margin-top:70px;
+">
+
+    <div style="
+        max-width:1200px;
+        margin:0 auto;
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+        gap:35px;
+    ">
+
+        <!-- ABOUT PROJECT -->
+        <div>
+            <h3>DisasterPrep</h3>
+            <p style="opacity:0.9; line-height:1.7;">
+                DisasterPrep is an educational disaster management system
+                designed specifically for college students. The platform
+                aims to spread awareness, preparedness, and correct response
+                strategies for natural and man-made disasters.
+            </p>
+        </div>
+
+        <!-- EMERGENCY CONTACTS -->
+        <div>
+            <h3>Emergency Contacts (India)</h3>
+            <p style="margin:6px 0;">🚨 National Emergency: <b>112</b></p>
+            <p style="margin:6px 0;">🚑 Ambulance: <b>108</b></p>
+            <p style="margin:6px 0;">🔥 Fire & Rescue: <b>101</b></p>
+            <p style="margin:6px 0;">👮 Police: <b>100</b></p>
+            <p style="margin:6px 0;">🌊 Disaster Helpline: <b>1078</b></p>
+        </div>
+
+        <!-- QUICK LINKS -->
+        <div>
+            <h3>Quick Links</h3>
+            <p><a href="#home" style="color:white; text-decoration:none;">Home</a></p>
+            <p><a href="#disasters" style="color:white; text-decoration:none;">Disasters</a></p>
+            <p><a href="#quiz" style="color:white; text-decoration:none;">Quiz</a></p>
+            <p><a href="#about" style="color:white; text-decoration:none;">About</a></p>
+        </div>
+
+        <!-- AWARENESS INFO -->
+        <div>
+            <h3>Disaster Awareness</h3>
+            <p style="opacity:0.9; line-height:1.7;">
+                Being prepared before a disaster strikes can save lives.
+                Always follow official alerts, keep emergency kits ready,
+                and stay informed about evacuation procedures and safety
+                guidelines issued by authorities.
+            </p>
+        </div>
+
+    </div>
+
+    <hr style="margin:35px 0; opacity:0.3;">
+
+    <p style="
+        text-align:center;
+        font-size:14px;
+        opacity:0.9;
+    ">
+        © 2026 DisasterPrep | Disaster Management System for College Students  
+        <br>
+        Developed as an Academic Final Year Project
+    </p>
+
+</footer>
+<script>
+function submitAwarenessQuiz() {
+    let score = 0;
+
+    const answers = {
+        q1: "a",
+        q2: "b",
+        q3: "b",
+        q4: "b",
+        q5: "b"
+    };
+
+    for (let q in answers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (!selected) {
+            document.getElementById("quizResult").innerText =
+                "Please answer all questions.";
+            return;
+        }
+        if (selected.value === answers[q]) score++;
+    }
+
+    let feedback = "";
+    if (score >= 4) feedback = "Excellent preparedness!";
+    else if (score >= 3) feedback = "Good awareness, keep improving.";
+    else feedback = "You should learn more about disaster safety.";
+
+    localStorage.setItem("awarenessScore", score);
+
+    document.getElementById("quizResult").innerHTML =
+        `Score: ${score} / 5<br>${feedback}<br>
+        <span style="color:#1f3c88;">
+            Login to attempt the evaluated quiz.
+        </span>`;
+}
+</script>
+
+
+
+<script>
+
+/* =================================================
+   HYBRID AI CHATBOT (STABLE + FACULTY SAFE)
+   AI LOGIC + NLP INTENT DETECTION
+================================================= */
+
+function sendMessage() {
+    const input = document.getElementById("userInput");
+    const chatBox = document.getElementById("chatBox");
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    chatBox.innerHTML += `<p><b>You:</b> ${text}</p>`;
+    chatBox.innerHTML += `<p><b>Bot:</b> analyzing your question...</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    setTimeout(() => {
+        const reply = generateAIResponse(text);
+
+        chatBox.innerHTML = chatBox.innerHTML.replace(
+            `<p><b>Bot:</b> analyzing your question...</p>`,
+            `<p><b>Bot:</b> ${reply}</p>`
+        );
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }, 600);
+
+    input.value = "";
+}
+
+/* =========================
+   AI RESPONSE ENGINE
+========================= */
+function generateAIResponse(input) {
+    const q = input.toLowerCase();
+
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    const fire = [
+        "Fire disasters are caused by uncontrolled flames that can lead to severe damage to life and property. Fire preparedness includes installing smoke alarms, keeping fire extinguishers ready, knowing emergency exits, and practicing evacuation drills.",
+        "Fire safety focuses on prevention, early detection, and quick response. Proper electrical maintenance and safe handling of flammable materials reduce fire risks.",
+        "Fire disaster management involves preparedness, response, and recovery. Staying calm and following safety procedures during a fire can save lives."
+    ];
+
+    const flood = [
+        "Floods occur due to heavy rainfall, river overflow, or dam failure. Flood preparedness includes moving to higher ground, avoiding flood water, and following evacuation instructions.",
+        "Flood disaster management emphasizes early warning systems, emergency shelters, and public awareness to minimize damage."
+    ];
+
+    const earthquake = [
+        "Earthquake preparedness focuses on securing heavy objects, identifying safe spots, and practicing the Drop–Cover–Hold technique.",
+        "Earthquake disaster management includes awareness programs, emergency drills, and structural safety measures."
+    ];
+
+    const cyclone = [
+        "Cyclones are intense storms with strong winds and heavy rainfall. Preparedness includes monitoring weather alerts and evacuating coastal areas when advised.",
+        "Cyclone management relies on early warnings, shelters, and coordinated emergency response."
+    ];
+
+    const landslide = [
+        "Landslides often occur due to heavy rainfall and unstable slopes. Preparedness includes avoiding steep areas and following official warnings.",
+        "Landslide disaster management focuses on early detection, evacuation, and risk awareness."
+    ];
+
+    const preparedness = [
+        "Disaster preparedness refers to actions taken before a disaster to reduce loss of life and property. It includes emergency kits, evacuation plans, training, and early warning systems.",
+        "Preparedness helps communities respond effectively and recover faster after disasters."
+    ];
+
+    const general = [
+        "Disaster management involves preparedness, response, recovery, and mitigation to reduce disaster impact.",
+        "Awareness, planning, and coordination are essential components of effective disaster management."
+    ];
+
+    // 🔍 INTENT DETECTION
+    if (q.includes("fire")) return pick(fire);
+    if (q.includes("flood")) return pick(flood);
+    if (q.includes("earthquake")) return pick(earthquake);
+    if (q.includes("cyclone")) return pick(cyclone);
+    if (q.includes("landslide")) return pick(landslide);
+    if (q.includes("preparedness")) return pick(preparedness);
+    if (q.includes("disaster")) return pick(general);
+    if (q.startsWith("why") || q.startsWith("how")) return pick(general);
+
+    // 🧠 SMART FALLBACK
+    return pick([
+        "This question is related to disaster awareness and safety. Understanding preparedness and response strategies helps reduce risks during emergencies.",
+        "Disaster management focuses on reducing risks, ensuring safety, and building resilience through planning and awareness.",
+        "Proper education and preparedness play a key role in minimizing the impact of disasters."
+    ]);
+}
+
+/* =========================
+   CHATBOT TOGGLE
+========================= */
+function toggleChatbot() {
+    const chatbot = document.getElementById("chatbot");
+    chatbot.classList.toggle("collapsed");
+}
+
+
+
+/* =========================
+   CHATBOT TOGGLE
+========================= */
+function toggleChatbot() {
+    const chatbot = document.getElementById("chatbot");
+    if (chatbot) {
+        chatbot.classList.toggle("collapsed");
+    }
+}
+
+/* =========================
+   DISASTER MODAL POPUP
+========================= */
+function openModal(type) {
+    const modal = document.getElementById("disasterModal");
+    const title = document.getElementById("modalTitle");
+    const content = document.getElementById("modalContent");
+    const image = document.getElementById("modalImage");
+
+    if (!modal || !title || !content || !image) {
+        alert("Modal elements missing");
+        return;
+    }
+
+    if (type === "Flood") {
+        title.innerText = "Flood Safety";
+        image.src = "images/flood.jpg";
+        content.innerHTML =
+            "<b>Safety Guidelines:</b><br>" +
+            "• Move to higher ground immediately.<br>" +
+            "• Avoid flood water.<br>" +
+            "• Stay away from electric poles.<br>" +
+            "• Follow evacuation alerts.";
+    }
+    else if (type === "Earthquake") {
+        title.innerText = "Earthquake Safety";
+        image.src = "images/earthquake.jpg";
+        content.innerHTML =
+            "<b>Safety Guidelines:</b><br>" +
+            "• Drop, Cover, Hold On.<br>" +
+            "• Stay away from windows.<br>" +
+            "• Do not use elevators.";
+    }
+    else if (type === "Cyclone") {
+        title.innerText = "Cyclone Safety";
+        image.src = "images/cyclone.jpg";
+        content.innerHTML =
+            "<b>Safety Guidelines:</b><br>" +
+            "• Stay indoors.<br>" +
+            "• Secure doors and windows.<br>" +
+            "• Follow weather alerts.";
+    }
+    else if (type === "Fire") {
+        title.innerText = "Fire Safety";
+        image.src = "images/fire.jpg";
+        content.innerHTML =
+            "<b>Safety Guidelines:</b><br>" +
+            "• Use stairs, not elevators.<br>" +
+            "• Cover mouth and nose.<br>" +
+            "• Crawl under smoke.";
+    }
+    else if (type === "Landslide") {
+        title.innerText = "Landslide Safety";
+        image.src = "images/landslide.jpg";
+        content.innerHTML =
+            "<b>Safety Guidelines:</b><br>" +
+            "• Move away from slopes.<br>" +
+            "• Watch for cracks.<br>" +
+            "• Avoid river valleys.";
+    }
+
+    modal.style.display = "block";
+}
+
+function closeModal() {
+    const modal = document.getElementById("disasterModal");
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+
+
+
+
+</body>
+</html>
+

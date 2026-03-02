@@ -1,0 +1,30 @@
+alert("AI CHATBOT JS LOADED");
+
+function sendMessage() {
+    var input = document.getElementById("userInput");
+    var chatBox = document.getElementById("chatBox");
+
+    var text = input.value.trim();
+    if (text === "") return;
+
+    chatBox.innerHTML += "<p><b>You:</b> " + text + "</p>";
+
+    fetch("http://localhost:3000/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: text })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        chatBox.innerHTML += "<p><b>Bot:</b> " + data.reply + "</p>";
+    })
+    .catch(function() {
+        chatBox.innerHTML += "<p><b>Bot:</b> AI server error.</p>";
+    });
+
+    input.value = "";
+}
